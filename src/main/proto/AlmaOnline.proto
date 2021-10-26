@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "org.example.AlmaOnline.server";
+option java_outer_classname = "AlmaOnlineProto";
+option objc_class_prefix = "AO";
+
+package almaonline;
+
+service AlmaOnline {
+  rpc Restaurants(RestaurantsRequest) returns (RestaurantsReply) {}
+  rpc Menu(MenuRequest) returns (MenuReply) {}
+  rpc CreateDineInOrder(CreateDineInOrderRequest) returns (CreateDineInOrderReply) {}
+  rpc CreateDeliveryOrder(CreateDeliveryOrderRequest) returns (CreateDeliveryOrderReply) {}
+  rpc GetOrder(OrderRequest) returns (OrderReply) {}
+}
+
+message RestaurantsRequest {
+
+}
+
+message RestaurantsReply {
+  repeated RpcRestaurant restaurants = 1;
+}
+
+message MenuRequest {
+  string rid = 1;
+}
+
+message MenuReply {
+  RpcMenuInfo menu = 1;
+}
+
+message CreateDineInOrderRequest {
+  RpcOrder.RpcDineInOrder dineInOrder = 1;
+}
+
+message CreateDineInOrderReply {
+  string message = 1;
+}
+
+message CreateDeliveryOrderRequest {
+  RpcOrder.RpcDeliveryOrder deliveryOrder = 1;
+}
+
+message CreateDeliveryOrderReply {
+  string message = 1;
+}
+
+message OrderRequest {
+  string rid = 1;
+  string oid = 2;
+}
+
+message OrderReply {
+  RpcBasicOrder order = 1;
+}
+
+message RpcBasicOrder {
+  string customer = 1;
+  string createDate = 2;
+  string deliveryAddress = 3;
+  string reservationDate = 4;
+  repeated RpcMenuItem items = 5;
+}
+
+message RpcRestaurant {
+  string id = 1;
+  string name = 2;
+}
+
+message RpcMenuInfo {
+  repeated RpcMenuItem items = 1;
+}
+
+message RpcMenuItem {
+  string name = 1;
+  double price = 2;
+}
+
+message RpcOrder {
+  message RpcDineInOrder {
+    string oid = 1;
+    string rid = 2;
+    string customer = 3;
+    string createDate = 4;
+    repeated RpcMenuItem items = 5;
+    string reservationDate = 6;
+  }
+  message RpcDeliveryOrder {
+    string oid = 1;
+    string rid = 2;
+    string customer = 3;
+    string createDate = 4;
+    repeated RpcMenuItem items = 5;
+    string deliveryAddress = 6;
+  }
+  oneof order {
+    RpcDineInOrder dineInOrder = 1;
+    RpcDeliveryOrder deliveryOrder = 2;
+  }
+}
+
+
